@@ -4,6 +4,12 @@ library(tidyverse)
 library(fs)
 library(terra)
 library(ggplot2)
+library(raster)
+
+NA_to_zero <- function(number){
+  if (is.na(number)){to_return <- 0} else{to_return <- as.double(number)}
+  to_return
+}
 
 year = "2006"
 STOC_year = "2008"
@@ -27,10 +33,10 @@ CLC_STOC_250 <- CLC_STOC_250_raw %>%
     CLC_250 == 5 ~ "Water",
     TRUE ~ "No data")) %>% 
   group_by(Num) %>% 
-  summarise(Contains_Urban_250 = !is.na(table(CLC_250)["Urban"]),
-            Contains_Agri_250 = !is.na(table(CLC_250)["Agriculture"]),
-            Contains_Forest_250 = !is.na(table(CLC_250)["Forest and natural"]),
-            Contains_Water_250 = !is.na(table(CLC_250)["Water"]),
+  summarise(Contains_Urban_250 = NA_to_zero(table(CLC_250)["Urban"]) > 10,
+            Contains_Agri_250 = NA_to_zero(table(CLC_250)["Agriculture"]) > 10,
+            Contains_Forest_250 = NA_to_zero(table(CLC_250)["Forest and natural"]) > 10,
+            Contains_Water_250 = NA_to_zero(table(CLC_250)["Water"]) > 10,
             CLC_250 = names(which.max(table(CLC_250))), ) %>%
   add_column(ID_point = STOC_positions_vect$ID_point)
 CLC_STOC_250$Num <- NULL
@@ -47,10 +53,10 @@ CLC_STOC_500 <- CLC_STOC_500_raw %>%
     CLC_500 == 5 ~ "Water",
     TRUE ~ "No data")) %>% 
   group_by(Num) %>% 
-  summarise(Contains_Urban_500 = !is.na(table(CLC_500)["Urban"]),
-            Contains_Agri_500 = !is.na(table(CLC_500)["Agriculture"]),
-            Contains_Forest_500 = !is.na(table(CLC_500)["Forest and natural"]),
-            Contains_Water_500 = !is.na(table(CLC_500)["Water"]),
+  summarise(Contains_Urban_500 = NA_to_zero(table(CLC_500)["Urban"]) > 10,
+            Contains_Agri_500 = NA_to_zero(table(CLC_500)["Agriculture"]) > 10,
+            Contains_Forest_500 = NA_to_zero(table(CLC_500)["Forest and natural"]) > 10,
+            Contains_Water_500 = NA_to_zero(table(CLC_500)["Water"]) > 10,
             CLC_500 = names(which.max(table(CLC_500))), ) %>%
   add_column(ID_point = STOC_positions_vect$ID_point)
 CLC_STOC_500$Num <- NULL
