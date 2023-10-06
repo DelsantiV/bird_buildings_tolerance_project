@@ -11,7 +11,7 @@ Trophic_niche <- Traits_df %>% dplyr::select(c(code_sp, Trophic.Niche))
 
 # Identification of aquatic species
 Trophic_niche$Trophic.Niche <- as.factor(Trophic_niche$Trophic.Niche)
-aquatic_list <- (Trophic_niche %>% filter(grepl("Aquatic", Trophic.Niche)))$code_sp
+aquatic_list <- (Trophic_niche %>% filter(grepl("quatic", Trophic.Niche)))$code_sp
 aquatic_list <- aquatic_list[aquatic_list %in% all_sp]
 
 # Identification of raptors
